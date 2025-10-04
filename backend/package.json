@@ -1,0 +1,32 @@
+{
+    "name": "socios-ajerga-backend",
+    "version": "1.0.0",
+    "description": "Backend para gestión de inscripción de socios",
+    "main": "server.js",
+    "type": "module",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "nodemon server.js"
+    },
+    "keywords": [
+        "socios",
+        "backend",
+        "stripe",
+        "paypal",
+        "google-sheets"
+    ],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.21.2",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.7",
+        "stripe": "^17.5.0",
+        "@paypal/paypal-server-sdk": "^0.6.1",
+        "googleapis": "^144.0.0",
+        "body-parser": "^1.20.3"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.9"
+    }
+}
