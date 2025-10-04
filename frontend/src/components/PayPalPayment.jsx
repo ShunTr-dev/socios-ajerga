@@ -100,6 +100,8 @@ function PayPalPayment({ socioData }) {
         )
     }
 
+    const precioCuota = import.meta.env.PRECIO_CUOTA || 8 // Precio de la cuota anual
+
     return (
         <div className="space-y-6">
             <div>
@@ -107,7 +109,7 @@ function PayPalPayment({ socioData }) {
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                     <p className="text-sm text-gray-700">
-                        <span className="font-semibold">Importe a pagar:</span> 50,00 €
+                        <span className="font-semibold">Importe a pagar:</span> {precioCuota} €
                     </p>
                 </div>
 

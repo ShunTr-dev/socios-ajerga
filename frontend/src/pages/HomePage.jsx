@@ -99,6 +99,7 @@ function HomePage() {
         }
     }
 
+    const precioCuota = import.meta.env.PRECIO_CUOTA || 8 // Precio de la cuota anual
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
             <Header />
@@ -158,7 +159,7 @@ function HomePage() {
                                         <div className="text-center">
                                             <p className="text-sm text-gray-600 mb-2">Cuota anual</p>
                                             <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600">
-                                                8€
+                                                {precioCuota}€
                                             </p>
                                         </div>
                                     </div>
