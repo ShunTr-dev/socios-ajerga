@@ -23,6 +23,8 @@ const ELEMENT_OPTIONS = {
     },
 }
 
+const precioCuota = import.meta.env.PRECIO_CUOTA || 8 // Precio de la cuota anual
+
 /**
  * Componente de pago con Stripe
  * Procesa el pago mediante tarjeta de crédito/débito
@@ -36,7 +38,6 @@ function StripePayment({ socioData }) {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
-    const [postalCode, setPostalCode] = useState('')
 
     /**
      * Maneja el proceso de pago con Stripe
@@ -55,7 +56,7 @@ function StripePayment({ socioData }) {
         try {
             // 1. Crear payment intent en el backend
             const { data } = await axios.post('/api/create-payment-intent', {
-                amount: 5000, // 50.00 EUR (en centavos)
+                amount: `${precioCuota * 100}`,
                 currency: 'eur',
                 socioData,
             })
@@ -86,7 +87,7 @@ function StripePayment({ socioData }) {
                         metodoPago: 'stripe',
                         estado: 'Pagado',
                         fechaPago: new Date().toISOString(),
-                        monto: 50.0,
+                        monto: precioCuota,
                     })
 
                     // 4. Redirigir a página de éxito
@@ -105,7 +106,6 @@ function StripePayment({ socioData }) {
         }
     }
 
-    const precioCuota = import.meta.env.PRECIO_CUOTA || 8 // Precio de la cuota anual
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             {/* Número de tarjeta */}
@@ -246,7 +246,7 @@ function StripePayment({ socioData }) {
                                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                             />
                         </svg>
-                        <span className="text-lg">Pagar 50,00 € de forma segura</span>
+                        <span className="text-lg">Pagar {precioCuota} € de forma segura</span>
                     </div>
                 )}
             </Button>

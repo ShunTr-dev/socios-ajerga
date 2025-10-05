@@ -1,6 +1,6 @@
 import express from 'express'
 import pkg from '@paypal/paypal-server-sdk'
-const { client, orders } = pkg
+const { Client, Environment, OrdersController } = pkg
 
 const router = express.Router()
 
@@ -9,9 +9,9 @@ const router = express.Router()
  * @returns {Object} Cliente de PayPal configurado
  */
 function getPayPalClient() {
-    const environment = process.env.PAYPAL_MODE === 'production' ? 'production' : 'sandbox'
+    const environment = process.env.PAYPAL_MODE === 'production' ? Environment.Production : Environment.Sandbox
 
-    return client({
+    return new Client({
         clientCredentialsAuthCredentials: {
             oAuthClientId: process.env.PAYPAL_CLIENT_ID,
             oAuthClientSecret: process.env.PAYPAL_CLIENT_SECRET,
@@ -42,6 +42,7 @@ router.post('/create-paypal-order', async (req, res) => {
         }
 
         const paypalClient = getPayPalClient()
+        const ordersController = new OrdersController(paypalClient)
 
         const request = {
             body: {
@@ -64,7 +65,7 @@ router.post('/create-paypal-order', async (req, res) => {
             },
         }
 
-        const order = await orders.ordersCreate(request, { client: paypalClient })
+        const order = await ordersController.ordersCreate(request)
 
         console.log('Orden de PayPal creada:', order.result.id)
 
@@ -95,13 +96,14 @@ router.post('/capture-paypal-order', async (req, res) => {
         }
 
         const paypalClient = getPayPalClient()
+        const ordersController = new OrdersController(paypalClient)
 
         const request = {
             id: orderID,
             body: {},
         }
 
-        const capture = await orders.ordersCapture(request, { client: paypalClient })
+        const capture = await ordersController.ordersCapture(request)
 
         console.log('Pago capturado:', capture.result.id)
 
@@ -130,12 +132,13 @@ router.get('/verify-paypal-payment/:orderID', async (req, res) => {
         const { orderID } = req.params
 
         const paypalClient = getPayPalClient()
+        const ordersController = new OrdersController(paypalClient)
 
         const request = {
             id: orderID,
         }
 
-        const order = await orders.ordersGet(request, { client: paypalClient })
+        const order = await ordersController.ordersGet(request)
 
         res.json({
             status: order.result.status,
